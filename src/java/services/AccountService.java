@@ -39,4 +39,24 @@ public class AccountService {
         
         return null;
     }
-}
+    
+    public boolean forgotPassword(String email, String path) throws Exception{
+        
+       UserDB userDB = new UserDB();
+       String template = path + "/emailtemplates/forgot.html"; 
+       String subject = "Forgot Password";
+        User user = userDB.get(email);
+
+       if(user != null) {   
+            HashMap<String, String> tags = new HashMap<>();
+                tags.put("firstname", user.getFirstName());
+                tags.put("lastname", user.getLastName());
+                tags.put("date", (new java.util.Date()).toString());
+            GmailService.sendMail(email, subject, template, tags);    
+           return true;
+        }
+       else return false;
+       }
+        
+    }
+
